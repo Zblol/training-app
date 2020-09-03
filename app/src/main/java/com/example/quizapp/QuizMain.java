@@ -3,10 +3,12 @@ package com.example.quizapp;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,7 +18,8 @@ public class QuizMain extends AppCompatActivity {
 
     private Button mTrueButton;
     private Button mFalseButton;
-    private  Button mNextButton;
+    private ImageButton mNextButton;
+    private ImageButton mPrevButton;
     private TextView mQuestionTextView;
 
     private Question [] mQestionBank = new Question[]{
@@ -54,7 +57,8 @@ public class QuizMain extends AppCompatActivity {
             }
         });
 
-        mNextButton =(Button) findViewById(R.id.next_Button);
+//next and prev button
+        mNextButton =(ImageButton) findViewById(R.id.next_Button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +67,20 @@ public class QuizMain extends AppCompatActivity {
             }
         });
 
+        mPrevButton = (ImageButton)findViewById(R.id.prev_button);
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentIndex = (mCurrentIndex - 1) % mQestionBank.length;
+                if ( mCurrentIndex == 0){
+                    mCurrentIndex = 1;
+                }
+                mCurrentIndex = 0 ;
+                UpdateQuestion();
+            }
+        });
 
+//
 
         mQuestionTextView= (TextView)findViewById(R.id.question_text_view);
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
