@@ -28,7 +28,7 @@ private static final String KEY_INDEX = "index";
     private ImageButton mPrevButton;
     private TextView mQuestionTextView;
 
-    private Question [] mQestionBank = new Question[]{
+    private Question [] mQestionBank = new Question[] {
             new Question(R.string.russian_question, true),
             new Question(R.string.question_oceans, true),
             new Question(R.string.question_mideast, false),
@@ -37,8 +37,12 @@ private static final String KEY_INDEX = "index";
             new Question(R.string.question_asia, true),
     };
 
-    private int mCurrentIndex = 0;
 
+
+    private int mCurrentIndex = 0;
+    private int countAnswer = 0;
+    private int countRightAnswer = 0;
+    private int precentRigthAnswer = 0;
 
 
     @Override
@@ -47,15 +51,23 @@ private static final String KEY_INDEX = "index";
         Log.d(TAG,"OnCreate(Bundle) Called ");
         setContentView(R.layout.activity_quiz);
 
-        if( savedInstanceState != null){
+        if( savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
         }
+
+
+
+//True and False button
 
         mTrueButton = (Button)findViewById(R.id.trueButton);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckAnswer(true);
+                сheckAnswer(true);
+                if(mQestionBank[mCurrentIndex].isAnswerTrue()||!mQestionBank[mCurrentIndex].isAnswerTrue()) {
+                    mTrueButton.setEnabled(false);
+                    mFalseButton.setEnabled(false);
+                }
             }
         });
 
@@ -64,7 +76,12 @@ private static final String KEY_INDEX = "index";
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckAnswer(false);
+                сheckAnswer(false);
+                if(mQestionBank[mCurrentIndex].isAnswerTrue()||!mQestionBank[mCurrentIndex].isAnswerTrue()) {
+                    mTrueButton.setEnabled(false);
+                    mFalseButton.setEnabled(false);
+                }
+
             }
         });
 
@@ -74,19 +91,29 @@ private static final String KEY_INDEX = "index";
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQestionBank.length;
-           UpdateQuestion();
+
+                mFalseButton.setEnabled(true);
+                mTrueButton.setEnabled(true);
+           updateQuestion();
+
             }
         });
+
+
 
         mPrevButton = (ImageButton)findViewById(R.id.prev_button);
         mPrevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = mCurrentIndex - 1 ;
-            if (mCurrentIndex == -1){
+            if (mCurrentIndex == -1) {
                 mCurrentIndex = 5;
             }
-                UpdateQuestion();
+                updateQuestion();
+                mTrueButton.setEnabled(false);
+                mFalseButton.setEnabled(false);
+
+
             }
         });
 
@@ -97,32 +124,43 @@ private static final String KEY_INDEX = "index";
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex+1) % mQestionBank.length;
-                UpdateQuestion();
+                updateQuestion();
             }
         });
 
-        UpdateQuestion();
+        updateQuestion();
 
     }
 
-    private void UpdateQuestion(){
+    private void   updateQuestion() {
 
         int question = mQestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
 
     }
 
-    private void CheckAnswer(boolean userPressedTrue){
+    private void сheckAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQestionBank[mCurrentIndex].isAnswerTrue();
         int massegeResId = 0 ;
-
-        if(userPressedTrue == answerIsTrue){
+        if(userPressedTrue == answerIsTrue) {
             massegeResId = R.string.toastCorrect_text;
-            }else{
+            countAnswer++;
+            countRightAnswer++;
+
+        } else {
             massegeResId = R.string.toastIncorrect_text;
+            countAnswer++;
+
         }
         Toast.makeText(this,massegeResId,Toast.LENGTH_SHORT).show();
+        precentRigthAnswer = (100 / countAnswer)* countRightAnswer;
+
+        if (countAnswer >= 5) {
+            Toast.makeText(this, "Right answer" + precentRigthAnswer + "%", Toast.LENGTH_SHORT).show();
+        }
+
     }
+
 
     @Override
     protected void onStart() {
