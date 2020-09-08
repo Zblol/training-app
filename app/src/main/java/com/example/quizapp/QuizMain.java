@@ -28,28 +28,21 @@ private static final String KEY_INDEX = "index";
     private ImageButton mPrevButton;
     private TextView mQuestionTextView;
 
-    private Question [] mQestionBank = new Question[] {
-            new Question(R.string.russian_question, true),
-            new Question(R.string.question_oceans, true),
-            new Question(R.string.question_mideast, false),
-            new Question(R.string.question_africa, false),
-            new Question(R.string.question_americas, true),
-            new Question(R.string.question_asia, true),
-    };
-
-
 
     private int mCurrentIndex = 0;
+
     private int countAnswer = 0;
     private int countRightAnswer = 0;
     private int precentRigthAnswer = 0;
 
+QuestionBank questionBank = new QuestionBank();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"OnCreate(Bundle) Called ");
         setContentView(R.layout.activity_quiz);
+
 
         if( savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
@@ -64,7 +57,7 @@ private static final String KEY_INDEX = "index";
             @Override
             public void onClick(View v) {
                 сheckAnswer(true);
-                if(mQestionBank[mCurrentIndex].isAnswerTrue()||!mQestionBank[mCurrentIndex].isAnswerTrue()) {
+                if(questionBank.getQestionBank()[mCurrentIndex].isAnswerTrue()||!questionBank.getQestionBank()[mCurrentIndex].isAnswerTrue()) {
                     mTrueButton.setEnabled(false);
                     mFalseButton.setEnabled(false);
                 }
@@ -77,7 +70,7 @@ private static final String KEY_INDEX = "index";
             @Override
             public void onClick(View v) {
                 сheckAnswer(false);
-                if(mQestionBank[mCurrentIndex].isAnswerTrue()||!mQestionBank[mCurrentIndex].isAnswerTrue()) {
+                if(questionBank.getQestionBank()[mCurrentIndex].isAnswerTrue()||!questionBank.getQestionBank()[mCurrentIndex].isAnswerTrue()) {
                     mTrueButton.setEnabled(false);
                     mFalseButton.setEnabled(false);
                 }
@@ -90,7 +83,7 @@ private static final String KEY_INDEX = "index";
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQestionBank.length;
+                mCurrentIndex = (mCurrentIndex + 1) % questionBank.getQestionBank().length;
 
                 mFalseButton.setEnabled(true);
                 mTrueButton.setEnabled(true);
@@ -123,7 +116,7 @@ private static final String KEY_INDEX = "index";
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex+1) % mQestionBank.length;
+                mCurrentIndex = (mCurrentIndex+1) % questionBank.getQestionBank().length;
                 updateQuestion();
             }
         });
@@ -134,13 +127,13 @@ private static final String KEY_INDEX = "index";
 
     private void   updateQuestion() {
 
-        int question = mQestionBank[mCurrentIndex].getTextResId();
+        int question = questionBank.getQestionBank()[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
 
     }
 
     private void сheckAnswer(boolean userPressedTrue) {
-        boolean answerIsTrue = mQestionBank[mCurrentIndex].isAnswerTrue();
+        boolean answerIsTrue = questionBank.getQestionBank()[mCurrentIndex].isAnswerTrue();
         int massegeResId = 0 ;
         if(userPressedTrue == answerIsTrue) {
             massegeResId = R.string.toastCorrect_text;
@@ -155,8 +148,8 @@ private static final String KEY_INDEX = "index";
         Toast.makeText(this,massegeResId,Toast.LENGTH_SHORT).show();
         precentRigthAnswer = (100 / countAnswer)* countRightAnswer;
 
-        if (countAnswer >= 5) {
-            Toast.makeText(this, "Right answer" + precentRigthAnswer + "%", Toast.LENGTH_SHORT).show();
+        if (countAnswer == questionBank.getQestionBank().length) {
+            Toast.makeText(this, "Right answer " + precentRigthAnswer + " %", Toast.LENGTH_SHORT).show();
         }
 
     }
