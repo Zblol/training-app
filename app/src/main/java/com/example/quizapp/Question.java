@@ -5,15 +5,13 @@ public class Question {
     private int mTextResId;
     private boolean mAnswerTrue;
     private boolean mShouldShow;
-    private boolean mAweredCorrectly;
+    private boolean mAnsweredCorrectly;
 
 
-    public Question(int textResId, boolean answerTrue, boolean shouldShow, boolean answeredCorrectly){
+    public Question(int textResId, boolean answerTrue){
         mTextResId = textResId;
         mAnswerTrue = answerTrue;
-        mShouldShow = shouldShow;
-        mAweredCorrectly = answeredCorrectly;
-
+        mShouldShow = true;
     }
 
     public boolean isShouldShow() {
@@ -24,12 +22,12 @@ public class Question {
         mShouldShow = shouldShow;
     }
 
-    public boolean isAweredCorrectly() {
-        return mAweredCorrectly;
+    public boolean isAnsweredCorrectly() {
+        return mAnsweredCorrectly;
     }
 
-    public void setAweredCorrectly(boolean aweredCorrectly) {
-        mAweredCorrectly = aweredCorrectly;
+    public void setAnsweredCorrectly(boolean answeredCorrectly) {
+        mAnsweredCorrectly = answeredCorrectly;
     }
 
 

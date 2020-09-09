@@ -2,18 +2,54 @@ package com.example.quizapp;
 
 public class QuestionBank {
 
+    private Question[] mQuestionBank;
 
+    public  QuestionBank (Question[] questions) {
+        this.mQuestionBank = questions;
+    }
 
-    private Question [] mQestionBank = new Question[] {
-            new Question(R.string.russian_question, true,false,false),
-            new Question(R.string.question_oceans, true,false,false),
-            new Question(R.string.question_mideast, false,false,false),
-            new Question(R.string.question_africa, false,false,false),
-            new Question(R.string.question_americas, true,false,false),
-            new Question(R.string.question_asia, true,false,false),
-    };
+    boolean isAnswerTrueAt(int mCurrentIndex) {
+        return mQuestionBank[mCurrentIndex].isAnswerTrue();
+    }
 
-    public Question[] getQestionBank() {
-        return mQestionBank;
+    int totalNumberOfQuestion() {
+        return mQuestionBank.length;
+    }
+
+    int getQuestionBodyAt(int mCurrentIndex) {
+        return mQuestionBank[mCurrentIndex].getTextResId();
+    }
+
+    void hideQuestionAt(int mCurrentIndex) {
+       Question question = mQuestionBank[mCurrentIndex];
+       question.setShouldShow(false);
+    }
+
+    void answeredCorrectlyAt(int mCurrentIndex) {
+        Question question = mQuestionBank[mCurrentIndex];
+        question.setAnsweredCorrectly(true);
+    }
+
+    boolean allQuestionsAnswered() {
+        for (int i = 0; i < mQuestionBank.length; i++) {
+            Question question = mQuestionBank[i];
+            if (question.isShouldShow()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    int calculatedPercent() {
+        int correctAnswers = 0;
+        for (int i = 0; i < mQuestionBank.length; i++) {
+         Question question = mQuestionBank[i];
+         if (question.isAnsweredCorrectly()) {
+             correctAnswers++;
+         }
+
+        }
+        return (100 / totalNumberOfQuestion()) * correctAnswers;
+
     }
 }
