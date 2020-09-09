@@ -4,11 +4,30 @@ public class Question {
 
     private int mTextResId;
     private boolean mAnswerTrue;
+    private boolean mShouldShow;
+    private boolean mAnsweredCorrectly;
 
 
     public Question(int textResId, boolean answerTrue){
         mTextResId = textResId;
         mAnswerTrue = answerTrue;
+        mShouldShow = true;
+    }
+
+    public boolean isShouldShow() {
+        return mShouldShow;
+    }
+
+    public void setShouldShow(boolean shouldShow) {
+        mShouldShow = shouldShow;
+    }
+
+    public boolean isAnsweredCorrectly() {
+        return mAnsweredCorrectly;
+    }
+
+    public void setAnsweredCorrectly(boolean answeredCorrectly) {
+        mAnsweredCorrectly = answeredCorrectly;
     }
 
 
