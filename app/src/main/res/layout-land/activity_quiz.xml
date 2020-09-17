@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".QuizMain">
 
+    <Button
+        android:id="@+id/cheating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="42dp"
+        android:layout_marginEnd="322dp"
+        android:layout_marginStart="322dp"
+        android:text="@string/cheat_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/question_text_view"
         android:layout_width="match_parent"
