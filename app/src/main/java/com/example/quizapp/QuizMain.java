@@ -2,6 +2,7 @@ package com.example.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ public class QuizMain extends AppCompatActivity {
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
     private TextView mQuestionTextView;
+    private  Button mCheatButton;
 
     private int mCurrentIndex = 0;
 
@@ -44,13 +46,27 @@ public class QuizMain extends AppCompatActivity {
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
         }
+//Cheat Button
+
+        mCheatButton = (Button) findViewById(R.id.cheating_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean answerIsTrue = questionBank.isAnswerTrueAt(mCurrentIndex);
+                Intent intent = CheatActivity.newIntent(QuizMain.this, answerIsTrue);
+                startActivity(intent);
+            }
+        });
+
+
+
 //True and False button
 
-        mTrueButton = (Button)findViewById(R.id.trueButton);
+        mTrueButton = (Button) findViewById(R.id.trueButton);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                сheckAnswer(true);
+                checkAnswer(true);
                 mTrueButton.setEnabled(false);
                 mFalseButton.setEnabled(false);
             }
@@ -60,7 +76,7 @@ public class QuizMain extends AppCompatActivity {
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                сheckAnswer(false);
+                checkAnswer(false);
                 mTrueButton.setEnabled(false);
                 mFalseButton.setEnabled(false);
             }
@@ -71,7 +87,7 @@ public class QuizMain extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % questionBank.totalNumberOfQuestion();
+               mCurrentIndex = (mCurrentIndex + 1) % questionBank.totalNumberOfQuestion();
 
                 mFalseButton.setEnabled(true);
                 mTrueButton.setEnabled(true);
@@ -108,10 +124,10 @@ public class QuizMain extends AppCompatActivity {
     }
 
     private void updateQuestion() {
-        int question = questionBank.getQuestionBodyAt(mCurrentIndex);
+      int question = questionBank.getQuestionBodyAt(mCurrentIndex);
         mQuestionTextView.setText(question);
     }
-    private void сheckAnswer(boolean userPressedTrue) {
+    private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = questionBank.isAnswerTrueAt(mCurrentIndex);
         int messageResId = 0 ;
         questionBank.hideQuestionAt(mCurrentIndex);
