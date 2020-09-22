@@ -26,6 +26,11 @@ public static Intent newIntent(Context packageContext, boolean answerIsTrue){
         return intent;
 }
 
+public static boolean wasAnswerShown(Intent result ) {
+        return result.getBooleanExtra(EXTRA_ANSWER_SHOW,false);
+
+}
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
