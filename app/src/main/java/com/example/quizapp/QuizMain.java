@@ -2,6 +2,8 @@ package com.example.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,7 @@ public class QuizMain extends AppCompatActivity {
     private  Button mCheatButton;
 
     private int mCurrentIndex = 0;
+    private boolean mIsCheater;
 
     QuestionBank questionBank ;
 
@@ -43,6 +46,8 @@ public class QuizMain extends AppCompatActivity {
         };
 
         questionBank = new QuestionBank(question);
+
+
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
@@ -93,7 +98,7 @@ public class QuizMain extends AppCompatActivity {
 
                 mFalseButton.setEnabled(true);
                 mTrueButton.setEnabled(true);
-
+                mIsCheater = false;
                 updateQuestion();
             }
         });
@@ -133,15 +138,17 @@ public class QuizMain extends AppCompatActivity {
         boolean answerIsTrue = questionBank.isAnswerTrueAt(mCurrentIndex);
         int messageResId = 0 ;
         questionBank.hideQuestionAt(mCurrentIndex);
-
-        if (userPressedTrue == answerIsTrue) {
-            messageResId = R.string.toastCorrect_text;
-            questionBank.answeredCorrectlyAt(mCurrentIndex);
-
+        if (mIsCheater) {
+            messageResId = R.string.judment_toast;
         } else {
-            messageResId = R.string.toastIncorrect_text;
-        }
+            if (userPressedTrue == answerIsTrue) {
+                messageResId = R.string.toastCorrect_text;
+                questionBank.answeredCorrectlyAt(mCurrentIndex);
 
+            } else {
+                messageResId = R.string.toastIncorrect_text;
+            }
+        }
         Toast.makeText(this,messageResId,Toast.LENGTH_SHORT).show();
 
         if (questionBank.allQuestionsAnswered()) {
@@ -149,7 +156,20 @@ public class QuizMain extends AppCompatActivity {
         }
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK){
+            return;
+        }
+        if ( requestCode == REQUEST_CHEAT_CODE){
+            if(data == null){
+                return;
+            }
+            mIsCheater = CheatActivity.wasAnswerShown(data);
+        }
 
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onStart() {
