@@ -15,6 +15,7 @@ public class QuizMain extends AppCompatActivity {
 
     private static  final String TAG = "QuizMain";
     private static final String KEY_INDEX = "index";
+    private static final int REQUEST_CHEAT_CODE = 0;
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -54,7 +55,8 @@ public class QuizMain extends AppCompatActivity {
             public void onClick(View v) {
                 boolean answerIsTrue = questionBank.isAnswerTrueAt(mCurrentIndex);
                 Intent intent = CheatActivity.newIntent(QuizMain.this, answerIsTrue);
-                startActivity(intent);
+
+                startActivityForResult(intent,REQUEST_CHEAT_CODE);
             }
         });
 

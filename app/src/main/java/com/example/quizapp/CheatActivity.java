@@ -14,6 +14,7 @@ import org.w3c.dom.Text;
 public class CheatActivity extends AppCompatActivity {
 
 private static final String EXTRA_ANSWER_IS_TRUE = "com.example.quizapp.anwser_is_true";
+private static final String EXTRA_ANSWER_SHOW = "com.example.quizapp.answer_shown";
 
 private  boolean mAnswerIsTrue;
 private TextView mAnswerTextView;
@@ -42,11 +43,16 @@ public static Intent newIntent(Context packageContext, boolean answerIsTrue){
                 } else {
                     mAnswerTextView.setText(R.string.false_button);
                 }
+                setAnswerShownResult(true);
             }
         });
+    }
 
+    private void setAnswerShownResult(boolean isAnswerShown) {
 
-
+        Intent data = new Intent();
+        data.putExtra(EXTRA_ANSWER_SHOW, isAnswerShown);
+        setResult(RESULT_OK, data);
 
     }
 }
